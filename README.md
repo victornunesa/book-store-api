@@ -53,7 +53,9 @@ In the root of the project there are 3 folders, one called "application" which i
 ```bash
   composer install
   composer dump-autoload
+  cp .env.example .env
   php artisan key:generate
+  php artisan jwt:generate
   php artisan migrate
   php artisan db:seed
 ```
