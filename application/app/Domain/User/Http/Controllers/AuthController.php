@@ -2,10 +2,17 @@
 
 namespace App\Domain\User\Http\Controllers;
 
+use App\Domain\User\Repositories\UserRepositoryInterface;
 use App\Http\Controllers\Controller;
 
 class AuthController extends Controller
 {
+    private UserRepositoryInterface $userRepository;
+
+    public function __construct(UserRepositoryInterface $userRepository)
+    {
+        $this->userRepository = $userRepository;
+    }
     /*
      * Get a JWT via given credentials.
      *
