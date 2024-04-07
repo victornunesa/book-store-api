@@ -4,6 +4,7 @@ namespace App\Domain\User\Http\Controllers;
 
 use App\Domain\User\Repositories\UserRepositoryInterface;
 use App\Http\Controllers\Controller;
+use App\Http\Responses\ApiSuccessResponse;
 
 class AuthController extends Controller
 {
@@ -25,7 +26,9 @@ class AuthController extends Controller
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
-        return $this->respondWithToken($token);
+        // return $this->respondWithToken($token);
+        return new ApiSuccessResponse($this->respondWithToken($token), 'Logado com sucesso!');
+
     }
 
     /**
@@ -37,7 +40,8 @@ class AuthController extends Controller
     {
         $user = auth()->user();
 
-        return response()->json($user);
+        // return response()->json($user);
+        return new ApiSuccessResponse($user);
     }
 
     /**
@@ -49,7 +53,7 @@ class AuthController extends Controller
     {
         auth()->logout();
 
-        return response()->json(['message' => 'Successfully logged out']);
+        return new ApiSuccessResponse([],'Successfully logged out');
     }
 
     /**
@@ -59,7 +63,9 @@ class AuthController extends Controller
      */
     public function refresh()
     {
-        return $this->respondWithToken(auth()->refresh());
+        // return $this->respondWithToken(auth()->refresh());
+
+        return new ApiSuccessResponse($this->respondWithToken(auth()->refresh()));
     }
 
     /**
@@ -70,11 +76,11 @@ class AuthController extends Controller
      */
     protected function respondWithToken($token)
     {
-        return response()->json([
+        return [
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => auth()->factory()->getTTL() * 60,
-        ]);
+        ];
     }
 }
 

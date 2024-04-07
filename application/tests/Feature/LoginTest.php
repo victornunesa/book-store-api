@@ -45,9 +45,14 @@ class LoginTest extends TestCase
 
         // $response->assertStatus(200);
         $response->assertJsonStructure([
-            'access_token',
-            'token_type',
-            'expires_in',
+            'success',
+            'data' => [
+                'access_token',
+                'token_type',
+                'expires_in',
+            ],
+            'message',
+            'metadata'
         ]);
 
         $this->assertAuthenticated();
