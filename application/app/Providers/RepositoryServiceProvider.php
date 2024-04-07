@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Domain\Book\Repositories\BookRepository;
+use App\Domain\Book\Repositories\BookRepositoryInterface;
 use App\Domain\User\Repositories\UserRepository;
 use App\Domain\User\Repositories\UserRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
@@ -16,6 +18,7 @@ class RepositoryServiceProvider extends ServiceProvider
     */
     public $bindings = [
         UserRepositoryInterface::class => UserRepository::class,
+        BookRepositoryInterface::class => BookRepository::class,
     ];
 
     /**
