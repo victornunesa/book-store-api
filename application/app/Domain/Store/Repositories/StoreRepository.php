@@ -8,7 +8,7 @@ class StoreRepository implements StoreRepositoryInterface
 {
     public function all()
     {
-        return Store::all();
+        return Store::with('books')->get();
     }
 
     public function create(array $data)
@@ -31,7 +31,7 @@ class StoreRepository implements StoreRepositoryInterface
             $store->books()->sync($data['books_id']);
         }
 
-        
+
         return $store;
     }
 
@@ -43,6 +43,6 @@ class StoreRepository implements StoreRepositoryInterface
 
     public function find($id)
     {
-        return Store::findOrFail($id);
+        return Store::with('books')->findOrFail($id);
     }
 }

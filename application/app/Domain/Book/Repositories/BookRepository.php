@@ -8,7 +8,7 @@ class BookRepository implements BookRepositoryInterface
 {
     public function all()
     {
-        return Book::all();
+        return Book::with('stores')->get();
     }
 
     public function create(array $data)
@@ -31,6 +31,6 @@ class BookRepository implements BookRepositoryInterface
 
     public function find($id)
     {
-        return Book::findOrFail($id);
+        return Book::with('stores')->findOrFail($id);
     }
 }
