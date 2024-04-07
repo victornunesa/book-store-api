@@ -1,6 +1,7 @@
 <?php
 
 use App\Domain\Book\Http\Controllers\BookController;
+use App\Domain\Store\Http\Controllers\StoreController;
 use App\Domain\User\Http\Controllers\AuthController;
 
 use Illuminate\Http\Request;
@@ -27,6 +28,7 @@ Route::group([ 'middleware' => 'auth:api' ], function ($router) {
 
 Route::group([ 'middleware' => 'auth:api' ], function ($router) {
     Route::apiResource('books', BookController::class);
+    Route::apiResource('stores', StoreController::class);
 });
 
 

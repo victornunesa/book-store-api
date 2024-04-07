@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Domain\Book\Http\Requests;
+namespace App\Domain\Store\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class UpdateBookRequest extends FormRequest
+class UpdateStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,11 +23,9 @@ class UpdateBookRequest extends FormRequest
     {
         return [
             'name' => 'string',
-            'isbn' => [
-                'integer',
-                Rule::unique('books', 'isbn')->ignore($this->book),
-            ],
-            'value' => 'decimal:1,8',
+            'address' => 'string',
+            'active' => 'boolean',
+            'books_id' => 'array|exists:books,id',
         ];
     }
 }

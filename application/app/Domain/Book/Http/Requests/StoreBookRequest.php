@@ -24,7 +24,7 @@ class StoreBookRequest extends FormRequest
         return [
             'name' => 'required|string',
             'isbn' => 'required|unique:books|integer',
-            'value' => 'required|decimal:2,8',
+            'value' => 'required|decimal:1,8',
         ];
     }
 }

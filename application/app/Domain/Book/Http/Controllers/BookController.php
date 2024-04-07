@@ -43,6 +43,7 @@ class BookController extends Controller
     public function show(string $id)
     {
         $book = $this->bookRepository->find($id);
+        
         return new ApiSuccessResponse($book);
     }
 

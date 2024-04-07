@@ -20,9 +20,9 @@ class BookFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->name(),
+            'name' => fake()->sentence(5),
             'isbn' => fake()->unique()->numberBetween(100000, 900000),
-            'value' => fake()->randomFloat(2)
+            'value' => fake()->randomFloat(1, 2000, 3000)
         ];
     }
 }
