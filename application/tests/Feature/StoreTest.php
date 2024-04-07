@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Domain\Book\Models\Book;
+use App\Domain\Store\Models\Store;
 use App\Domain\User\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -11,12 +12,11 @@ use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
-
-class BooksTest extends TestCase
+class StoreTest extends TestCase
 {
     use DatabaseTransactions, WithFaker;
 
-    private $rota = '/api/books';
+    private $rota = '/api/stores';
     private $repository_structure = [];
     private $repository_structure_failure = [];
     private $data_structure = [];
@@ -44,8 +44,8 @@ class BooksTest extends TestCase
         // Dados retornados na model
         $this->data_structure = [
             'name',
-            'isbn',
-            'value'
+            'address',
+            'active'
         ];
     }
 
@@ -79,7 +79,7 @@ class BooksTest extends TestCase
     }
 
     /** @test */
-    public function checkGetBooks(): void
+    public function checkGetStores(): void
     {
         $response = $this->json('get', $this->rota, [], $this->authorization);
 
@@ -90,7 +90,7 @@ class BooksTest extends TestCase
         $response->assertStatus(Response::HTTP_OK);
     }
     /** @test */
-    public function checkGetBook(): void
+    public function checkGetStore(): void
     {
         $rota = $this->rota.'/1';
         $response = $this->json('get', $rota, [], $this->authorization);
@@ -102,7 +102,7 @@ class BooksTest extends TestCase
         $response->assertStatus(Response::HTTP_OK);
     }
     /** @test */
-    public function checkGetBookFailure(): void
+    public function checkGetStoreFailure(): void
     {
         $rota = $this->rota.'/0';
         $response = $this->json('get', $rota, [], $this->authorization);
@@ -111,9 +111,9 @@ class BooksTest extends TestCase
         $response->assertStatus(Response::HTTP_NOT_FOUND);
     }
     /** @test */
-    public function checkDeleteBook(): void
+    public function checkDeleteStore(): void
     {
-        $data = Book::inRandomOrder()->firstOrFail();
+        $data = Store::inRandomOrder()->firstOrFail();
         $rota = $this->rota.'/'.$data['id'];
 
         $response = $this->json('delete', $rota, [], $this->authorization);
@@ -121,9 +121,9 @@ class BooksTest extends TestCase
         $response->assertStatus(Response::HTTP_NO_CONTENT);
     }
     /** @test */
-    public function checkDeleteBookFailure(): void
+    public function checkDeleteStoreFailure(): void
     {
-        $data = Book::orderBy('id', 'desc')->first();
+        $data = Store::orderBy('id', 'desc')->first();
         $rota = $this->rota.'/'.($data['id']+1);
 
         $response = $this->json('delete', $rota, [], $this->authorization);
@@ -131,14 +131,14 @@ class BooksTest extends TestCase
         $response->assertStatus(Response::HTTP_NOT_FOUND);
     }
     /** @test */
-    public function checkStoreBook(): void
+    public function checkStoreStore(): void
     {
         $book = Book::factory()->create();
 
         $content = [
-            'name' => $this->faker->sentence,
-            'isbn' => $this->faker->numberBetween(100000, 900000),
-            'value' => $this->faker->randomFloat(2),
+            'name' =>  $this->faker->company(),
+            'address' => $this->faker->address(),
+            'active' => $this->faker->boolean(),
             'books_id' => [$book->id]
         ];
         $response = $this->json('post', $this->rota, $content, $this->authorization);
@@ -146,26 +146,27 @@ class BooksTest extends TestCase
         $response->assertStatus(Response::HTTP_CREATED);
     }
     /** @test */
-    public function checkStoreBookFailure(): void
+    public function checkStoreStoreFailure(): void
     {
         $content = [
-            'name' => $this->faker->sentence,
-            'isbn' => $this->faker->numberBetween(100000, 900000),
-            'value' => $this->faker->word()
+            'name' =>  $this->faker->company(),
+            'address' => $this->faker->address(),
+            'active' => $this->faker->boolean(),
+            'books_id' => $this->faker->sentence(5)
         ];
         $response = $this->json('post', $this->rota, $content, $this->authorization);
 
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
     }
     /** @test */
-    public function checkUpdateBook(): void
+    public function checkUpdateStore(): void
     {
-        $data = Book::inRandomOrder()->firstOrFail();
+        $data = Store::inRandomOrder()->firstOrFail();
         $rota = $this->rota.'/'.$data['id'];
         $content = [
-            'name' => $this->faker->sentence,
-            'isbn' => $this->faker->numberBetween(100000, 900000),
-            'value' => $this->faker->randomFloat(2)
+            'name' =>  $this->faker->company(),
+            'address' => $this->faker->address(),
+            'active' => $this->faker->boolean(),
         ];
 
         $response = $this->json('put', $rota, $content, $this->authorization);
@@ -173,14 +174,14 @@ class BooksTest extends TestCase
         $response->assertStatus(Response::HTTP_OK);
     }
     /** @test */
-    public function checkUpdateBookFailure(): void
+    public function checkUpdateStoreFailure(): void
     {
-        $data = Book::orderBy('id', 'desc')->first();
+        $data = Store::orderBy('id', 'desc')->first();
         $rota = $this->rota.'/'.$data['id']+1;
         $content = [
-            'name' => $this->faker->sentence,
-            'isbn' => $this->faker->numberBetween(100000, 900000),
-            'value' => $this->faker->randomFloat(2)
+            'name' =>  $this->faker->company(),
+            'address' => $this->faker->address(),
+            'active' => $this->faker->boolean(),
         ];
 
         $response = $this->json('put', $rota, $content, $this->authorization);
